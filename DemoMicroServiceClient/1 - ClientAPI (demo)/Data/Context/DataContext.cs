@@ -1,5 +1,4 @@
-﻿using ClientAPI.Mapping;
-using Microsoft.EntityFrameworkCore;
+﻿global using Microsoft.EntityFrameworkCore;
 
 namespace ClientAPI.Data.Context
 {
@@ -9,10 +8,10 @@ namespace ClientAPI.Data.Context
 
         public DataContext(DbContextOptions<DataContext> options) : base(options) { }
 
-        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            base.OnModelCreating(modelBuilder);
-            modelBuilder.Entity<Client>(new ClientMapping().Configure);
+            base.OnConfiguring(optionsBuilder);
+            optionsBuilder.UseSqlServer("Server=DESKTOP-IT6RHKB\\SQLEXPRESS;Database=DemoMicroserviceOne;Trusted_Connection=True;TrustServerCertificate=true");
         }
     }
 }
