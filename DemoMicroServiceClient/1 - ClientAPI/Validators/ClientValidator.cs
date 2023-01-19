@@ -6,6 +6,7 @@ namespace ClientAPI.Validators
     {
         private const string erroAgencia = "AGÊNCIA DEVE CONTER APENAS NÚMEROS";
         private const string erroConta = "CONTA DEVE CONTER APENAS NÚMEROS";
+        private const string erroTipoConta = "TIPO CONTA DEVE SER 'PF' OU 'PJ'";
         private static readonly Regex regex = new Regex(@"^\d+$");
         public static string ValidaAgencia(string agencia)
         {
@@ -19,6 +20,14 @@ namespace ClientAPI.Validators
         {
             if (!regex.IsMatch(conta))
                 return erroConta;
+
+            return string.Empty;
+        }
+
+        public static string ValidaTipoConta(string tipoConta)
+        {
+            if (tipoConta != "PF" || tipoConta != "PJ")
+                return erroTipoConta;
 
             return string.Empty;
         }
