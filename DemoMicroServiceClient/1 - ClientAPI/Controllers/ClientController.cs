@@ -1,5 +1,4 @@
 ﻿using ClientAPI.Services.ClientServices;
-using ClientAPI.Validators;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
 
@@ -10,7 +9,6 @@ namespace ClientAPI.Controllers
     public class ClientController : ControllerBase
     {
         private readonly IClientService _clientService;
-        private readonly IClientValidator _clientValidator;
 
         public ClientController(IClientService clientService)
         {
