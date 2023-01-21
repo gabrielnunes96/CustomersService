@@ -1,5 +1,4 @@
 ﻿using ClientAPI.Data.Context;
-using Microsoft.EntityFrameworkCore;
 
 namespace ClientAPI.Services.ClientServices
 {
@@ -27,10 +26,10 @@ namespace ClientAPI.Services.ClientServices
 
         public async Task<List<Client>> AddClient(Client _client)
         {
-            _dbContext.Clients.Add(_client);
-            await _dbContext.SaveChangesAsync();
-            return await _dbContext.Clients.ToListAsync();
+                _dbContext.Clients.Add(_client);
+                await _dbContext.SaveChangesAsync();
 
+            return await _dbContext.Clients.ToListAsync();
         }
 
         public async Task<List<Client>?> DeleteClient(int id)
