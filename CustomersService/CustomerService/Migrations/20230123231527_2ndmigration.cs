@@ -5,7 +5,7 @@
 namespace CustomerService.Migrations
 {
     /// <inheritdoc />
-    public partial class FirstMigration : Migration
+    public partial class _2ndmigration : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -16,24 +16,17 @@ namespace CustomerService.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    accountNumber = table.Column<string>(name: "_accountNumber", type: "nvarchar(max)", nullable: true),
-                    agencyNumber = table.Column<string>(name: "_agencyNumber", type: "nvarchar(max)", nullable: true),
-                    userName = table.Column<string>(name: "_userName", type: "nvarchar(max)", nullable: false),
-                    accountType = table.Column<string>(name: "_accountType", type: "nvarchar(max)", nullable: true),
-                    idNumber = table.Column<string>(name: "_idNumber", type: "nvarchar(450)", nullable: true),
+                    userName = table.Column<string>(name: "_userName", type: "nvarchar(30)", maxLength: 30, nullable: false),
+                    accountType = table.Column<string>(name: "_accountType", type: "nvarchar(max)", nullable: false),
+                    idNumber = table.Column<string>(name: "_idNumber", type: "nvarchar(max)", nullable: false),
+                    agencyNumber = table.Column<string>(name: "_agencyNumber", type: "nvarchar(10)", maxLength: 10, nullable: false),
+                    accountNumber = table.Column<string>(name: "_accountNumber", type: "nvarchar(10)", maxLength: 10, nullable: false),
                     isActive = table.Column<bool>(name: "_isActive", type: "bit", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Clients", x => x.Id);
                 });
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Clients__idNumber",
-                table: "Clients",
-                column: "_idNumber",
-                unique: true,
-                filter: "[_idNumber] IS NOT NULL");
         }
 
         /// <inheritdoc />

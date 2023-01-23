@@ -8,11 +8,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
 
-namespace ClientAPI.Migrations
+namespace CustomerService.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20230111175306_FirstMigration")]
-    partial class FirstMigration
+    [Migration("20230123231527_2ndmigration")]
+    partial class _2ndmigration
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -24,7 +24,7 @@ namespace ClientAPI.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("ClientAPI.Models.Client", b =>
+            modelBuilder.Entity("CustomerService.Models.Client", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -33,31 +33,34 @@ namespace ClientAPI.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("_accountNumber")
-                        .HasColumnType("nvarchar(max)");
+                        .IsRequired()
+                        .HasMaxLength(10)
+                        .HasColumnType("nvarchar(10)");
 
                     b.Property<string>("_accountType")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("_agencyNumber")
-                        .HasColumnType("nvarchar(max)");
+                        .IsRequired()
+                        .HasMaxLength(10)
+                        .HasColumnType("nvarchar(10)");
 
                     b.Property<string>("_idNumber")
-                        .HasColumnType("nvarchar(450)");
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("_isActive")
                         .HasColumnType("bit");
 
                     b.Property<string>("_userName")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(30)
+                        .HasColumnType("nvarchar(30)");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("_idNumber")
-                        .IsUnique()
-                        .HasFilter("[_idNumber] IS NOT NULL");
-
-                    b.ToTable("Clients", (string)null);
+                    b.ToTable("Clients");
                 });
 #pragma warning restore 612, 618
         }
