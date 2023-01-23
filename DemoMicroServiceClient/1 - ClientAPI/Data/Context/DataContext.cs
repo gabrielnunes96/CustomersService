@@ -1,4 +1,5 @@
 ﻿global using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 
 namespace ClientAPI.Data.Context
 {
@@ -6,12 +7,17 @@ namespace ClientAPI.Data.Context
     {
         public DbSet<Client>? Clients { get; set; }
 
+
         public DataContext(DbContextOptions<DataContext> options) : base(options) { }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             base.OnConfiguring(optionsBuilder);
-            optionsBuilder.UseSqlServer("Server=DESKTOP-IT6RHKB\\SQLEXPRESS;Database=DemoMicroserviceOne;Trusted_Connection=True;TrustServerCertificate=true");
+            IConfigurationRoot configurationRoot = new ConfigurationBuilder()
+                .SetBasePath(AppDomain.CurrentDomain.BaseDirectory)
+                .AddJsonFile("appsettings.json")
+                .Build();
+            optionsBuilder.UseSqlServer(configurationRoot.GetConnectionString("DemoMicroserviceOne"));
         }
     }
 }
