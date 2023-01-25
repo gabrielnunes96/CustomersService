@@ -12,11 +12,11 @@ namespace CustomerService.Services.ClientServices
 
         public async Task<Client?> GetClientById(int id)
         {
-            var _uniqueClient = await _dbContext.Clients.FindAsync(id);
-            if (_uniqueClient is null)
+            var uniqueClient = await _dbContext.Clients.FindAsync(id);
+            if (uniqueClient is null)
                 return null;
 
-            return _uniqueClient;
+            return uniqueClient;
         }
 
         public async Task<List<Client>> GetAllClients()
@@ -34,27 +34,27 @@ namespace CustomerService.Services.ClientServices
 
         public async Task<List<Client>?> DeleteClient(int id)
         {
-            var _client = await _dbContext.Clients.FindAsync(id);
-            if (_client is null) return null;
+            var client = await _dbContext.Clients.FindAsync(id);
+            if (client is null) return null;
 
-            _dbContext.Clients.Remove(_client);
+            _dbContext.Clients.Remove(client);
             await _dbContext.SaveChangesAsync();
             return await _dbContext.Clients.ToListAsync();
         }
 
         public async Task<List<Client>?> UpdateClient(int id, Client request)
         {
-            var _client = await _dbContext.Clients.FindAsync(id);
-            if (_client is null) return null;
+            var client = await _dbContext.Clients.FindAsync(id);
+            if (client is null) return null;
 
 
-            _client._accountNumber = request._accountNumber;
-            _client._agencyNumber = request._agencyNumber;
-            _client._userName = request._userName;
-            _client._accountType = request._accountType;
-            _client._idNumber = request._idNumber;
-            _client._isActive = request._isActive;
-            _client._accountType = request._accountType;
+            client.accountNumber = request.accountNumber;
+            client.agencyNumber = request.agencyNumber;
+            client.userName = request.userName;
+            client.accountType = request.accountType;
+            client.idNumber = request.idNumber;
+            client.isActive = request.isActive;
+            client.accountType = request.accountType;
 
             await _dbContext.SaveChangesAsync();
 

@@ -39,12 +39,12 @@ namespace CustomerService.Controllers
                 return BadRequest(ModelState);
             try
             {
-                var _singleClient = await _clientService.GetClientById(id);
+                var singleClient = await _clientService.GetClientById(id);
 
-                if (_singleClient is null)
+                if (singleClient is null)
                     return NotFound();
                 else
-                    return Ok(_singleClient);
+                    return Ok(singleClient);
 
             }
             catch (ArgumentException e)
@@ -61,12 +61,12 @@ namespace CustomerService.Controllers
 
             try
             {
-                var _newClient = await _clientService.AddClient(_client);
+                var newClient = await _clientService.AddClient(_client);
 
-                if (_newClient is null)
+                if (newClient is null)
                     return NotFound();
                 else
-                    return Ok(_newClient);
+                    return Ok(newClient);
             }
             catch (ArgumentException e)
             {
@@ -82,12 +82,12 @@ namespace CustomerService.Controllers
 
             try
             {
-                var _updatedClient = await _clientService.UpdateClient(id, request);
+                var updatedClient = await _clientService.UpdateClient(id, request);
 
-                if (_updatedClient is null)
+                if (updatedClient is null)
                     return NotFound();
 
-                return Ok(_updatedClient);
+                return Ok(updatedClient);
             }
             catch (ArgumentException e)
             {
@@ -104,12 +104,12 @@ namespace CustomerService.Controllers
 
             try
             {
-                var _deletedClient = await _clientService.DeleteClient(id);
+                var deletedClient = await _clientService.DeleteClient(id);
 
-                if (_deletedClient is null)
+                if (deletedClient is null)
                     return NotFound();
 
-                return Ok(_deletedClient);
+                return Ok(deletedClient);
             }
             catch (ArgumentException e)
             {
