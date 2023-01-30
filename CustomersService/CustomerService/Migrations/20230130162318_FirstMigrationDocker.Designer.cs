@@ -11,8 +11,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CustomerService.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20230130142158_2ndMigration")]
-    partial class _2ndMigration
+    [Migration("20230130162318_FirstMigrationDocker")]
+    partial class FirstMigrationDocker
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

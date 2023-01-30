@@ -11,12 +11,11 @@ namespace CustomerService.Data.Context
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            base.OnConfiguring(optionsBuilder);
-            IConfigurationRoot configurationRoot = new ConfigurationBuilder()
+            IConfigurationRoot configuration = new ConfigurationBuilder()
                 .SetBasePath(AppDomain.CurrentDomain.BaseDirectory)
                 .AddJsonFile("appsettings.json")
                 .Build();
-            optionsBuilder.UseSqlServer(configurationRoot.GetConnectionString("CustomerService"));
+            optionsBuilder.UseSqlServer(configuration.GetConnectionString("Docker"));
         }
     }
 }
