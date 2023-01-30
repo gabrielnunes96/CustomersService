@@ -1,5 +1,6 @@
 global using CustomerService.Models;
 using CustomerService.Data.Context;
+using CustomerService.Services.CardServices;
 using CustomerService.Services.ClientServices;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -11,6 +12,7 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddScoped<IClientService, ClientService>();
+builder.Services.AddScoped<ICardService, CardService>();
 builder.Services.AddDbContext<DataContext>();
 
 var app = builder.Build();

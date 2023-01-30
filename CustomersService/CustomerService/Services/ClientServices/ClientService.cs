@@ -24,12 +24,11 @@ namespace CustomerService.Services.ClientServices
             return await _dbContext.Clients.ToListAsync();
         }
 
-        public async Task<List<Client>> AddClient(Client _client)
+        public async Task<Client?> AddClient(Client _client)
         {
-                _dbContext.Clients.Add(_client);
-                await _dbContext.SaveChangesAsync();
-
-            return await _dbContext.Clients.ToListAsync();
+            _dbContext.Clients.Add(_client);
+            await _dbContext.SaveChangesAsync();
+            return await _dbContext.Clients.FindAsync(_client.Id);
         }
 
         public async Task<List<Client>?> DeleteClient(int id)
@@ -42,7 +41,7 @@ namespace CustomerService.Services.ClientServices
             return await _dbContext.Clients.ToListAsync();
         }
 
-        public async Task<List<Client>?> UpdateClient(int id, Client request)
+        public async Task<Client?> UpdateClient(int id, Client request)
         {
             var client = await _dbContext.Clients.FindAsync(id);
             if (client is null) return null;
@@ -58,7 +57,7 @@ namespace CustomerService.Services.ClientServices
 
             await _dbContext.SaveChangesAsync();
 
-            return await _dbContext.Clients.ToListAsync();
+            return await _dbContext.Clients.FindAsync(client.Id);
 
         }
     }

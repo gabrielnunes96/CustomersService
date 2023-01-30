@@ -1,11 +1,10 @@
 ﻿global using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
-
 namespace CustomerService.Data.Context
 {
     public class DataContext : DbContext
     {
         public DbSet<Client>? Clients { get; set; }
+        public DbSet<Card>? Cards { get; set; }
 
 
         public DataContext(DbContextOptions<DataContext> options) : base(options) { }
@@ -17,7 +16,7 @@ namespace CustomerService.Data.Context
                 .SetBasePath(AppDomain.CurrentDomain.BaseDirectory)
                 .AddJsonFile("appsettings.json")
                 .Build();
-            optionsBuilder.UseSqlServer(configurationRoot.GetConnectionString("DemoMicroserviceOne"));
+            optionsBuilder.UseSqlServer(configurationRoot.GetConnectionString("CustomerService"));
         }
     }
 }
