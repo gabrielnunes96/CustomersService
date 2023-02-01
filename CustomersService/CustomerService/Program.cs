@@ -1,7 +1,7 @@
-global using ClientAPI.Models;
-global using ClientAPI.Data;
-using ClientAPI.Services.ClientServices;
-using ClientAPI.Data.Context;
+global using CustomerService.Models;
+using CustomerService.Data.Context;
+using CustomerService.Services.CardServices;
+using CustomerService.Services.ClientServices;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -11,7 +11,8 @@ builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-builder.Services.AddScoped<IClientService,ClientService>();
+builder.Services.AddScoped<IClientService, ClientService>();
+builder.Services.AddScoped<ICardService, CardService>();
 builder.Services.AddDbContext<DataContext>();
 
 var app = builder.Build();
