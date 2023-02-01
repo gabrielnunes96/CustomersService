@@ -1,5 +1,4 @@
 ﻿using CustomerService.Data.Context;
-using CustomerService.Models;
 
 namespace CustomerService.Services.CardServices
 {
@@ -8,21 +7,21 @@ namespace CustomerService.Services.CardServices
         private readonly DataContext _dbContext;
         public CardService(DataContext dbContext)
         {
-            _dbContext = dbContext; 
+            _dbContext = dbContext;
         }
 
-        public async Task<Card?> GetCardById(int id)
+        public async Task<Card> GetCardById(int id)
         {
             var uniqueCard = await _dbContext.Cards.FindAsync(id);
             if (uniqueCard is null) return null;
             return uniqueCard;
         }
-        public async Task<List<Card?>> GetAllCards()
+        public async Task<List<Card>> GetAllCards()
         {
             return await _dbContext.Cards.ToListAsync();
         }
 
-        public async Task<Card?> AddCards(Card _card)
+        public async Task<Card> AddCards(Card _card)
         {
             _dbContext.Cards.Add(_card);
             await _dbContext.SaveChangesAsync();
@@ -30,12 +29,12 @@ namespace CustomerService.Services.CardServices
             return await _dbContext.Cards.FindAsync(_card.Id);
         }
 
-        public async Task<Card?> UpdateCard(Card request, int id)
+        public async Task<Card> UpdateCard(Card request, int id)
         {
             var card = await _dbContext.Cards.FindAsync(id);
             if (card is null) return null;
 
-            
+
             card.cardNumber = request.cardNumber;
             card.cardDueDate = request.cardDueDate;
             card.cardCVC = request.cardCVC;
@@ -49,7 +48,7 @@ namespace CustomerService.Services.CardServices
             return await _dbContext.Cards.FindAsync(card.Id);
         }
 
-        public async Task<List<Card?>> DeleteCard(int id)
+        public async Task<List<Card>> DeleteCard(int id)
         {
             var card = await _dbContext.Cards.FindAsync(id);
             if (card is null) return null;
