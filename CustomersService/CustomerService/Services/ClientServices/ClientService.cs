@@ -1,4 +1,5 @@
 ﻿using CustomerService.Data.Context;
+using Microsoft.AspNetCore.Mvc;
 
 namespace CustomerService.Services.ClientServices
 {
@@ -18,7 +19,6 @@ namespace CustomerService.Services.ClientServices
 
             return uniqueClient;
         }
-
         public async Task<List<Client>> GetAllClients()
         {
             return await _dbContext.Clients.ToListAsync();

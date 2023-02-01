@@ -24,7 +24,7 @@ namespace CustomerService.Models
         [Required(ErrorMessage = "O número da agência é obrigatório.")]
         public string? agencyNumber { get; set; }
 
-        [Required(ErrorMessage = "O limite é obrigatório.")]
+        [Required(ErrorMessage = "O limite total é obrigatório.")]
         public string? totalLimit { get; set; }
 
         public string? currentLimit { get; set; }
