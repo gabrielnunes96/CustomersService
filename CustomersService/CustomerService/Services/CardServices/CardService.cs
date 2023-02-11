@@ -35,13 +35,13 @@ namespace CustomerService.Services.CardServices
             if (card is null) return null;
 
 
-            card.cardNumber = request.cardNumber;
-            card.cardDueDate = request.cardDueDate;
-            card.cardCVC = request.cardCVC;
-            card.accountNumber = request.accountNumber;
-            card.agencyNumber = request.agencyNumber;
-            card.totalLimit = request.totalLimit;
-            card.isActive = request.isActive;
+            card.CardNumber = request.CardNumber;
+            card.CardExpirationDate = request.CardExpirationDate;
+            card.CVC = request.CVC;
+            card.AccountNumber = request.AccountNumber;
+            card.AgencyNumber = request.AgencyNumber;
+            card.TotalLimit = request.TotalLimit;
+            card.IsActive = request.IsActive;
 
             await _dbContext.SaveChangesAsync();
 

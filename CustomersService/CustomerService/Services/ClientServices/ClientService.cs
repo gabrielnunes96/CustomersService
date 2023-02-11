@@ -47,13 +47,13 @@ namespace CustomerService.Services.ClientServices
             if (client is null) return null;
 
 
-            client.accountNumber = request.accountNumber;
-            client.agencyNumber = request.agencyNumber;
-            client.userName = request.userName;
-            client.accountType = request.accountType;
-            client.idNumber = request.idNumber;
-            client.isActive = request.isActive;
-            client.accountType = request.accountType;
+            client.AccountNumber = request.AccountNumber;
+            client.AgencyNumber = request.AgencyNumber;
+            client.UserName = request.UserName;
+            client.AccountType = request.AccountType;
+            client.IdNumber = request.IdNumber;
+            client.IsActive = request.IsActive;
+            client.AccountType = request.AccountType;
 
             await _dbContext.SaveChangesAsync();
 

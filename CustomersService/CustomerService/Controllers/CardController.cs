@@ -1,4 +1,5 @@
-﻿using CustomerService.Services.CardServices;
+﻿using CustomerService.Models;
+using CustomerService.Services.CardServices;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
 
@@ -57,14 +58,20 @@ namespace CustomerService.Controllers
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
+            if (!Card.IsValidCard(_card.CardNumber))
+                return BadRequest("Invalid card number");
+
+            if (!Card.IsValidLimit(_card))
+                return BadRequest("Invalid limit");
+
             try
             {
-                var newClient = await _cardService.AddCards(_card);
+                var newCard = await _cardService.AddCards(_card);
 
-                if (newClient is null)
+                if (newCard is null)
                     return NotFound();
                 else
-                    return Ok(newClient);
+                    return Ok(newCard);
             }
             catch (ArgumentException e)
             {
@@ -75,6 +82,12 @@ namespace CustomerService.Controllers
         [HttpPut("{id}")]
         public async Task<ActionResult<List<Card>>> UpdateCard(Card request, int id)
         {
+            if (!Card.IsValidCard(request.CardNumber))
+                return BadRequest("Invalid card number");
+
+            if (!Card.IsValidLimit(request))
+                return BadRequest("Invalid limit");
+
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 

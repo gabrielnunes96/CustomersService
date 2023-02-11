@@ -1,95 +1,57 @@
-﻿using System.ComponentModel;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 using System.Text.Json.Serialization;
 using System.Text.RegularExpressions;
 
 namespace CustomerService.Models
 {
-    /// <summary>
-    /// Entidade que representa a tabela Client
-    /// </summary>
-    public class Client : IValidatableObject    
+    public class Client : IValidatableObject
     {
-        private readonly Regex onlyNumbers = new Regex("^\\d+$");
-        private readonly Regex onlyLettersAndSpaces = new Regex("^[a-zA-Z ]+$");
-        private readonly Regex validateCPF = new Regex("(^\\d{3}\\.\\d{3}\\.\\d{3}\\-\\d{2}$)");
-        private readonly Regex validateCNPJ = new Regex("(^\\d{2}\\.\\d{3}\\.\\d{3}\\/\\d{4}\\-\\d{2}$)");
+        private static readonly Regex ValidateCPF = new Regex(@"^\d{3}\.\d{3}\.\d{3}-\d{2}$");
+        private static readonly Regex ValidateCNPJ = new Regex(@"^\d{2}\.\d{3}\.\d{3}/\d{4}-\d{2}$");
 
-
-        /// <summary>
-        /// Id do cliente
-        /// </summary>
-        /// <example>10</example>
         [Key]
+        [JsonIgnore]
         public int Id { get; set; }
 
-        /// <summary>
-        /// Nome do Cliente
-        /// </summary>
-        /// <example>Gabriel Nunes Campos</example>
-        [Required(ErrorMessage = "O nome do usuário é obratório.")]
+        [Required(ErrorMessage = "The user name is required.")]
         [MaxLength(30)]
-        public string? userName { get; set; }
+        [RegularExpression("^[a-zA-Z ]+$", ErrorMessage = "User name must only contain letters and spaces.")]
+        public string UserName { get; set; }
 
-        /// <summary>
-        /// Tipo de Identificador do Cliente
-        /// </summary>
-        /// <example>PF para pessoa física e PJ para pessoa jurídica.</example>
-        [Required(ErrorMessage = "O tipo de identificador ('PF' ou 'PJ') é obrigatório.")]
-        public string? accountType { get; set; }
+        [Required(ErrorMessage = "The account type (PF or PJ) is required.")]
+        public string AccountType { get; set; }
 
-        /// <summary>
-        /// CPF ou CNPJ do cliente
-        /// </summary>
-        /// <example>999.999.999-99/99.999.999/0001-99 </example>
-        [Required (ErrorMessage = "O número do identificador é obrigatório")]
-        public string? idNumber { get; set; }
+        [Required(ErrorMessage = "The ID number is required.")]
+        public string IdNumber { get; set; }
 
-        /// <summary>
-        /// Número da Agência
-        /// </summary>
-        /// <example>1234</example>
-        [Required(ErrorMessage = "O número da agência é obrigatório.")]
+        [Required(ErrorMessage = "The agency number is required.")]
         [MaxLength(10)]
-        public string? agencyNumber { get; set; }
+        [RegularExpression("^\\d+$", ErrorMessage = "Agency must only contain numbers.")]
+        public string AgencyNumber { get; set; }
 
-        /// <summary>
-        /// Número da Conta
-        /// </summary>
-        /// <example>2454</example>
-        [Required(ErrorMessage = "O número da conta é obrigatório.")]
+        [Required(ErrorMessage = "The account number is required.")]
         [MaxLength(10)]
-        public string? accountNumber { get; set; }
+        [RegularExpression("^\\d+$", ErrorMessage = "Account must only contain numbers.")]
+        public string AccountNumber { get; set; }
 
-        /// <summary>
-        /// Indica se o cliente está ativo ou não
-        /// </summary>
-        /// <example>True para cliente Ativo e False para cliente Inativo</example>
-        public bool isActive { get; set; }
+        public bool IsActive { get; set; }
 
         public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
         {
-            if (!onlyLettersAndSpaces.IsMatch(userName))
-                yield return new ValidationResult("Nome de usuário deve conter apenas letras e espaços em branco");
-
-            if (!accountType.Equals("PF") && (!accountType.Equals("PJ")) && (!accountType.Equals("pf")) && (!accountType.Equals("pj")))
-                yield return new ValidationResult("Tipo da conta deve ser 'PF' para pessoa física ou 'PJ' para pessoa jurídica.");
-
-            if (accountType.Equals("PF") && (!validateCPF.IsMatch(idNumber)))
+            if (!AccountType.Equals("PF", StringComparison.OrdinalIgnoreCase) &&
+                !AccountType.Equals("PJ", StringComparison.OrdinalIgnoreCase))
             {
-                    yield return new ValidationResult("CPF inválido.");
-            } else
-            {
-                if ((accountType.Equals("PJ")) && (!validateCNPJ.IsMatch(idNumber)))
-                        yield return new ValidationResult("CNPJ inválido.");
+                yield return new ValidationResult("Account type must be 'PF' for individual or 'PJ' for company.");
             }
 
-            if (!onlyNumbers.IsMatch(agencyNumber))     
-                yield return new ValidationResult("Número da agência deve conter apenas números.");         
-
-            if (!onlyNumbers.IsMatch(accountNumber))
-                yield return new ValidationResult("Número da conta deve conter apenas números.");
-
+            if (AccountType.Equals("PF", StringComparison.OrdinalIgnoreCase) && !ValidateCPF.IsMatch(IdNumber))
+            {
+                yield return new ValidationResult("Invalid CPF. Remember to use '.' and '-' to separate the fields of the CPF.");
+            }
+            else if (AccountType.Equals("PJ", StringComparison.OrdinalIgnoreCase) && !ValidateCNPJ.IsMatch(IdNumber))
+            {
+                yield return new ValidationResult("Invalid CNPJ. Remember to use '.', '/', and '-' to separate the fields of the CNPJ.");
+            }
         }
     }
 }
