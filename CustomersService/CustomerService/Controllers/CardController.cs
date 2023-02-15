@@ -10,7 +10,6 @@ namespace CustomerService.Controllers
     public class CardController : Controller
     {
         private readonly ICardService _cardService;
-
         public CardController(ICardService cardService)
         {
             _cardService = cardService;
@@ -31,7 +30,7 @@ namespace CustomerService.Controllers
             }
         }
 
-        [HttpGet("{id}")]
+        [HttpGet("/api/cards/{id}")]
         public async Task<ActionResult<Client>> GetCardById(int id)
         {
             if (!ModelState.IsValid)
@@ -53,7 +52,7 @@ namespace CustomerService.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<List<Card>>> AddCards(Card _card)
+        public async Task<ActionResult<List<Card>>> AddCards([FromBody] Card _card)
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
@@ -79,8 +78,8 @@ namespace CustomerService.Controllers
             }
         }
 
-        [HttpPut("{id}")]
-        public async Task<ActionResult<List<Card>>> UpdateCard(Card request, int id)
+        [HttpPut("/api/cards/{id}")]
+        public async Task<ActionResult<List<Card>>> UpdateCard([FromBody]Card request, int id)
         {
             if (!Card.IsValidCard(request.CardNumber))
                 return BadRequest("Invalid card number");
@@ -107,7 +106,7 @@ namespace CustomerService.Controllers
             }
         }
 
-        [HttpDelete("{id}")]
+        [HttpDelete("/api/cards/{id}")]
         public async Task<ActionResult<List<Card>>> DeleteCard(int id)
         {
             if (!ModelState.IsValid)
@@ -127,5 +126,32 @@ namespace CustomerService.Controllers
                 return StatusCode((int)HttpStatusCode.InternalServerError, e.Message);
             }
         }
+
+        [HttpPut("{cardId}/updatelimit/{value}")]
+        public async Task<IActionResult> UpdateCardLimit(int cardId, float value)
+        {
+            if (!ModelState.IsValid)
+                return BadRequest();
+            try
+            {
+                var card = await _cardService.GetCardById(cardId);
+
+                if (card is null) return NotFound();
+
+                if (value > card.CurrentLimit || card.IsBlocked || (!card.IsActive)) return BadRequest();
+
+                card.CurrentLimit -= value;
+
+                await _cardService.UpdateCard(card, cardId);
+
+                return Ok();
+
+            }
+            catch (ArgumentException e)
+            {
+                return StatusCode((int)HttpStatusCode.InternalServerError, e.Message);
+            }
+        }
+
     }
 }

@@ -1,5 +1,4 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using System.Text.Json.Serialization;
 using System.Text.RegularExpressions;
 
 namespace CustomerService.Models
@@ -10,7 +9,6 @@ namespace CustomerService.Models
         private static readonly Regex ValidateCNPJ = new Regex(@"^\d{2}\.\d{3}\.\d{3}/\d{4}-\d{2}$");
 
         [Key]
-        [JsonIgnore]
         public int Id { get; set; }
 
         [Required(ErrorMessage = "The user name is required.")]

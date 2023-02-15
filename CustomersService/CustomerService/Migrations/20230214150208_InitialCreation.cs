@@ -5,7 +5,7 @@
 namespace CustomerService.Migrations
 {
     /// <inheritdoc />
-    public partial class FirstCreation : Migration
+    public partial class InitialCreation : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -21,8 +21,8 @@ namespace CustomerService.Migrations
                     CVC = table.Column<string>(type: "nvarchar(3)", maxLength: 3, nullable: false),
                     AccountNumber = table.Column<string>(type: "nvarchar(10)", maxLength: 10, nullable: false),
                     AgencyNumber = table.Column<string>(type: "nvarchar(10)", maxLength: 10, nullable: false),
-                    TotalLimit = table.Column<int>(type: "int", nullable: false),
-                    CurrentLimit = table.Column<int>(type: "int", nullable: true),
+                    TotalLimit = table.Column<float>(type: "real", nullable: false),
+                    CurrentLimit = table.Column<float>(type: "real", nullable: false),
                     IsActive = table.Column<bool>(type: "bit", nullable: false),
                     IsBlocked = table.Column<bool>(type: "bit", nullable: false)
                 },

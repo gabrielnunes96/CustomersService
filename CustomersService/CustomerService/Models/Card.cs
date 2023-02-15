@@ -1,12 +1,10 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using System.Text.Json.Serialization;
 
 namespace CustomerService.Models
 {
     public class Card
     {
         [Key]
-        [JsonIgnore]
         public int Id { get; set; }
 
         [Required(ErrorMessage = "The card number is required.")]
@@ -36,9 +34,9 @@ namespace CustomerService.Models
         public string AgencyNumber { get; set; }
 
         [Required(ErrorMessage = "The total limit is required.")]
-        public int TotalLimit { get; set; }
+        public float TotalLimit { get; set; }
 
-        public int? CurrentLimit { get; set; }
+        public float CurrentLimit { get; set; }
 
         [Required(ErrorMessage = "It is necessary to inform if the card is active. 'true' for yes and 'false' for no.")]
         public bool IsActive { get; set; }
