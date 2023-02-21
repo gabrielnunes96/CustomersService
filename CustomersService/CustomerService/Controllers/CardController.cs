@@ -1,5 +1,4 @@
-﻿using CustomerService.Models;
-using CustomerService.Services.CardServices;
+﻿using CustomerService.Services.CardServices;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
 
@@ -79,7 +78,7 @@ namespace CustomerService.Controllers
         }
 
         [HttpPut("/api/cards/{id}")]
-        public async Task<ActionResult<List<Card>>> UpdateCard([FromBody]Card request, int id)
+        public async Task<ActionResult<List<Card>>> UpdateCard([FromBody] Card request, int id)
         {
             if (!Card.IsValidCard(request.CardNumber))
                 return BadRequest("Invalid card number");
@@ -120,32 +119,6 @@ namespace CustomerService.Controllers
                     return NotFound();
 
                 return Ok(deletedCard);
-            }
-            catch (ArgumentException e)
-            {
-                return StatusCode((int)HttpStatusCode.InternalServerError, e.Message);
-            }
-        }
-
-        [HttpPut("{cardId}/updatelimit/{value}")]
-        public async Task<IActionResult> UpdateCardLimit(int cardId, float value)
-        {
-            if (!ModelState.IsValid)
-                return BadRequest();
-            try
-            {
-                var card = await _cardService.GetCardById(cardId);
-
-                if (card is null) return NotFound();
-
-                if (value > card.CurrentLimit || card.IsBlocked || (!card.IsActive)) return BadRequest();
-
-                card.CurrentLimit -= value;
-
-                await _cardService.UpdateCard(card, cardId);
-
-                return Ok();
-
             }
             catch (ArgumentException e)
             {

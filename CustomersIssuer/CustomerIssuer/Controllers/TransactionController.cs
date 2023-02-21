@@ -1,5 +1,4 @@
 ﻿using CustomerIssuer.Services.TransactionServices;
-using Microsoft.AspNetCore.Cors.Infrastructure;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
 

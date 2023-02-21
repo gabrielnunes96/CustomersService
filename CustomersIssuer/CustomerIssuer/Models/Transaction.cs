@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+
 namespace CustomerIssuer.Models
 {
     public class Transaction
@@ -6,7 +7,7 @@ namespace CustomerIssuer.Models
         [Key]
         public Guid TransactionId { get; set; }
 
-        [Required(ErrorMessage ="The card number is required.")]
+        [Required(ErrorMessage = "The card number is required.")]
         [RegularExpression("^\\d+$", ErrorMessage = "Card number must contain only numbers.")]
         [MaxLength(16)]
         public string TransactionCardNumber { get; set; }

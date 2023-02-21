@@ -16,6 +16,11 @@ namespace CustomerService.Services.CardServices
             if (uniqueCard is null) return null;
             return uniqueCard;
         }
+
+        public Card GetCardByNumber(string cardnumber)
+        {
+            return _dbContext.Cards.SingleOrDefault(card => card.CardNumber == cardnumber);
+        }
         public async Task<List<Card>> GetAllCards()
         {
             return await _dbContext.Cards.ToListAsync();
