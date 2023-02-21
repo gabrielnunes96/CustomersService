@@ -11,42 +11,10 @@ namespace CustomerIssuer.Services.TransactionServices
         private readonly HttpClient _httpClient;
 
 
-        public TransactionService(DataContext dbContext, HttpClient httpClient)
+        public TransactionService(DataContext dbContext)
         {
             _dbContext = dbContext;
-            _httpClient = httpClient;
-            _httpClient.BaseAddress = new Uri("http://localhost:5254/");
-            _httpClient.DefaultRequestHeaders.Accept.Clear();
-            _httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
         }
-
-        public async Task<Transaction> CreateTransaction(Transaction transaction)
-        {
-            var json = JsonSerializer.Serialize(transaction);
-            var content = new StringContent(json, Encoding.UTF8, "application/json");
-
-            var response = await _httpClient.PostAsync("api/transactions", content);
-
-            if (!response.IsSuccessStatusCode)
-            {
-                throw new Exception($"Failed to create transaction. Status code: {response.StatusCode}");
-            }
-
-            var responseContent = await response.Content.ReadAsStringAsync();
-            return JsonSerializer.Deserialize<Transaction>(responseContent, new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
-        }
-
-        public async Task UpdateCardLimit(string cardId, decimal newLimit)
-        {
-            var requestUri = $"api/cards/{cardId}/limit/{newLimit}";
-            var response = await _httpClient.PutAsync(requestUri, null);
-
-            if (!response.IsSuccessStatusCode)
-            {
-                throw new Exception($"Failed to update card limit. Status code: {response.StatusCode}");
-            }
-        }
-
         public async Task<Transaction> GetTransactionById(int id)
         {
             var uniqueTransaction = await _dbContext.Transactions.FindAsync(id);
