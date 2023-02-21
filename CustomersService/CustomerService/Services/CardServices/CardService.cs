@@ -9,17 +9,11 @@ namespace CustomerService.Services.CardServices
         {
             _dbContext = dbContext;
         }
-
         public async Task<Card> GetCardById(int id)
         {
             var uniqueCard = await _dbContext.Cards.FindAsync(id);
             if (uniqueCard is null) return null;
             return uniqueCard;
-        }
-
-        public Card GetCardByNumber(string cardnumber)
-        {
-            return _dbContext.Cards.SingleOrDefault(card => card.CardNumber == cardnumber);
         }
         public async Task<List<Card>> GetAllCards()
         {
