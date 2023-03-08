@@ -1,15 +1,10 @@
 ﻿using CustomerIssuer.Data.Context;
 using System.Net.Http.Headers;
-using System.Text.Json;
-using System.Text;
-
 namespace CustomerIssuer.Services.TransactionServices
 {
     public class TransactionService : ITransactionService
     {
         private readonly DataContext _dbContext;
-        private readonly HttpClient _httpClient;
-
 
         public TransactionService(DataContext dbContext)
         {
@@ -29,9 +24,32 @@ namespace CustomerIssuer.Services.TransactionServices
 
         public async Task<Transaction> AddTransaction(Transaction _transaction)
         {
+            HttpClient client = new HttpClient();
+            Uri usuarioUri;
+            if (client is null)
+            {
+                client.BaseAddress = new Uri("http://localhost:5254/");
+                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+            }
 
             _dbContext.Transactions.Add(_transaction);
             _transaction.TransactionDate = DateTime.Now.ToString("dd/MM/yyyy HH:mm:ss");
+            _transaction.TransactionId = Guid.NewGuid();
+            _transaction.TransactionApprovalId = Guid.NewGuid();
+
+            var cardNumber = _transaction.TransactionCardNumber;
+            var creditCardApiUrl = $"http://localhost:5254/api/{cardNumber}";
+            var creditCardResponse = await client.GetAsync(creditCardApiUrl);
+            var creditCardContent = await creditCardResponse.Content.ReadAsStringAsync();
+
+            var creditCardId = Convert.ToInt64(creditCardContent);
+            var value = _transaction.TransactionValue;
+
+            var creditCardSubtractUrl = $"http://localhost:5254/api/card/{creditCardId}/subtract/{value}";
+            var creditCardSubtractResponse = await client.GetAsync(creditCardSubtractUrl);
+
+            await creditCardSubtractResponse.Content.ReadAsStringAsync();
+
             await _dbContext.SaveChangesAsync();
 
             return await _dbContext.Transactions.FindAsync(_transaction.TransactionId);
@@ -47,7 +65,7 @@ namespace CustomerIssuer.Services.TransactionServices
             transaction.TransactionDate = DateTime.Now.ToString("dd/MM/yyyy HH:mm:ss");
             transaction.TransactionId = Guid.NewGuid();
             transaction.TransactionApprovalId = Guid.NewGuid();
-            
+
             await _dbContext.SaveChangesAsync();
 
             return await _dbContext.Transactions.FindAsync(transaction.TransactionId);

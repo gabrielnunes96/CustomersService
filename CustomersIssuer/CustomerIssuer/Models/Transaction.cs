@@ -1,10 +1,12 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Newtonsoft.Json;
+using System.ComponentModel.DataAnnotations;
 
 namespace CustomerIssuer.Models
 {
     public class Transaction
     {
         [Key]
+        [JsonIgnore]
         public Guid TransactionId { get; set; }
 
         [Required(ErrorMessage = "The card number is required.")]
@@ -12,6 +14,7 @@ namespace CustomerIssuer.Models
         [MaxLength(16)]
         public string TransactionCardNumber { get; set; }
 
+        [JsonIgnore]
         public Guid TransactionApprovalId { get; set; }
 
         public string TransactionDate { get; set; }
