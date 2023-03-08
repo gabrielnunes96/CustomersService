@@ -125,6 +125,45 @@ namespace CustomerService.Controllers
                 return StatusCode((int)HttpStatusCode.InternalServerError, e.Message);
             }
         }
+        [HttpGet("/api/{cardNumber}")]
+        public async Task<ActionResult<int>> GetCardIdByCardNumber(string cardNumber)
+        {
+            if (!ModelState.IsValid) return BadRequest(ModelState);
 
+            if (!Card.IsValidCard(cardNumber)) return BadRequest("Invalid card number");
+            try
+            {
+                var updatedCard = await _cardService.GetCardIdByCardNumber(cardNumber);
+
+                if (updatedCard is null)
+                    return NotFound();
+
+                return Ok(updatedCard.Id);
+            }
+            catch (ArgumentException e)
+            {
+                return StatusCode((int)HttpStatusCode.InternalServerError, e.Message);
+            }
+        }
+        [HttpGet("/api/card/{id}/subtract/{value}")]
+        public async Task<ActionResult<bool>> Subtract(int id, float value)
+        {
+            if (!ModelState.IsValid) return BadRequest(ModelState);
+            try
+            {
+                var result = await _cardService.Subtract(id, value);
+
+                if (value < 0)
+                    return BadRequest("Valor não pode ser negativo.");
+
+                return Ok();
+
+            }
+            catch (ArgumentException e)
+            {
+                return StatusCode((int)HttpStatusCode.InternalServerError, e.Message);
+            }
+
+        }
     }
 }

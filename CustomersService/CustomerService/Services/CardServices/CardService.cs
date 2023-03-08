@@ -17,6 +17,7 @@ namespace CustomerService.Services.CardServices
         }
         public async Task<List<Card>> GetAllCards()
         {
+            
             return await _dbContext.Cards.ToListAsync();
         }
 
@@ -55,6 +56,27 @@ namespace CustomerService.Services.CardServices
             _dbContext.Cards.Remove(card);
             await _dbContext.SaveChangesAsync();
             return await _dbContext.Cards.ToListAsync();
+        }
+
+        public async Task<Card> GetCardIdByCardNumber(string cardNumber)
+        {
+
+            var uniqueCard = await _dbContext.Cards.Where(uniqueCard => uniqueCard.CardNumber == cardNumber).FirstOrDefaultAsync();
+            return uniqueCard;
+        }
+        public async Task<bool> Subtract(int id, float value)
+        {
+            try
+            {
+                var card = await _dbContext.Cards.FindAsync(id);
+                card.CurrentLimit -= value;
+                await _dbContext.SaveChangesAsync();
+                return true;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
         }
     }
 }
