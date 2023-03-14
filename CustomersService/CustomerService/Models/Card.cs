@@ -75,11 +75,11 @@ namespace CustomerService.Models
 
         public static bool IsValidLimit(Card card)
         {
-            bool isValidLimit = true;
+            bool result = true;
             if (card.TotalLimit < card.CurrentLimit)
                 return false;
 
-            return isValidLimit;
+            return result;
         }
     }
 }

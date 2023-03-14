@@ -1,4 +1,5 @@
 ﻿using CustomerService.Services.CardServices;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
 
@@ -13,12 +14,12 @@ namespace CustomerService.Controllers
         {
             _cardService = cardService;
         }
-
+        [Authorize("Bearer")]
         [HttpGet]
         public async Task<ActionResult<List<Client>>> GetAllCards()
         {
             if (!ModelState.IsValid)
-                return BadRequest();
+                return BadRequest(ModelState);
             try
             {
                 return Ok(await _cardService.GetAllCards());
@@ -28,12 +29,12 @@ namespace CustomerService.Controllers
                 return StatusCode((int)HttpStatusCode.InternalServerError, e.Message);
             }
         }
-
+        [Authorize("Bearer")]
         [HttpGet("/api/cards/{id}")]
         public async Task<ActionResult<Client>> GetCardById(int id)
         {
             if (!ModelState.IsValid)
-                return BadRequest();
+                return BadRequest(ModelState);
 
             try
             {
@@ -49,7 +50,7 @@ namespace CustomerService.Controllers
                 return StatusCode((int)HttpStatusCode.InternalServerError, e.Message);
             }
         }
-
+        [Authorize("Bearer")]
         [HttpPost]
         public async Task<ActionResult<List<Card>>> AddCards([FromBody] Card _card)
         {
@@ -76,7 +77,7 @@ namespace CustomerService.Controllers
                 return StatusCode((int)HttpStatusCode.InternalServerError, e.Message);
             }
         }
-
+        [Authorize("Bearer")]
         [HttpPut("/api/cards/{id}")]
         public async Task<ActionResult<List<Card>>> UpdateCard([FromBody] Card request, int id)
         {
@@ -104,7 +105,7 @@ namespace CustomerService.Controllers
                 return StatusCode((int)HttpStatusCode.InternalServerError, e.Message);
             }
         }
-
+        [Authorize("Bearer")]
         [HttpDelete("/api/cards/{id}")]
         public async Task<ActionResult<List<Card>>> DeleteCard(int id)
         {
@@ -125,6 +126,7 @@ namespace CustomerService.Controllers
                 return StatusCode((int)HttpStatusCode.InternalServerError, e.Message);
             }
         }
+        [Authorize("Bearer")]
         [HttpGet("/api/{cardNumber}")]
         public async Task<ActionResult<int>> GetCardIdByCardNumber(string cardNumber)
         {
@@ -145,18 +147,38 @@ namespace CustomerService.Controllers
                 return StatusCode((int)HttpStatusCode.InternalServerError, e.Message);
             }
         }
+        [Authorize("Bearer")]
         [HttpGet("/api/card/{id}/subtract/{value}")]
         public async Task<ActionResult<bool>> Subtract(int id, float value)
         {
             if (!ModelState.IsValid) return BadRequest(ModelState);
+
+            if (value < 0) return BadRequest("Invalid value");
+
             try
             {
                 var result = await _cardService.Subtract(id, value);
+                return Ok(result);
 
-                if (value < 0)
-                    return BadRequest("Valor não pode ser negativo.");
+            }
+            catch (ArgumentException e)
+            {
+                return StatusCode((int)HttpStatusCode.InternalServerError, e.Message);
+            }
 
-                return Ok();
+        }
+
+        [Authorize("Bearer")]
+        [HttpGet("/api/card/user/{cardNumber}")]
+        public async Task<ActionResult<bool>> RetornaClientConciliado(string cardNumber)
+        {
+            if (!ModelState.IsValid) return BadRequest(ModelState);
+            if (!Card.IsValidCard(cardNumber)) return BadRequest("Invalid card number");
+
+            try
+            {
+                var result = await _cardService.RetornaClientConciliado(cardNumber);
+                return Ok(result);
 
             }
             catch (ArgumentException e)

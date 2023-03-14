@@ -11,7 +11,6 @@ namespace CustomerService.Models
         [Key]
         public int Id { get; set; }
 
-        [Required(ErrorMessage = "The user name is required.")]
         [MaxLength(30)]
         [RegularExpression("^[a-zA-Z ]+$", ErrorMessage = "User name must only contain letters and spaces.")]
         public string UserName { get; set; }

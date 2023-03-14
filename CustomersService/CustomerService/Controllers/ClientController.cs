@@ -1,4 +1,5 @@
 ﻿using CustomerService.Services.ClientServices;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
 
@@ -14,12 +15,12 @@ namespace CustomerService.Controllers
         {
             _clientService = clientService;
         }
-
+        [Authorize("Bearer")]
         [HttpGet]
         public async Task<ActionResult<List<Client>>> GetAllClients()
         {
             if (!ModelState.IsValid)
-                return BadRequest();
+                return BadRequest(ModelState);
                 
             try
             {
@@ -31,7 +32,7 @@ namespace CustomerService.Controllers
             }
             
         }
-
+        [Authorize("Bearer")]
         [HttpGet("{id}")]
         public async Task<ActionResult<Client>> GetClientById(int id)
         {
@@ -52,7 +53,7 @@ namespace CustomerService.Controllers
                 return StatusCode((int)HttpStatusCode.InternalServerError, e.Message);
             }
         }
-
+        [Authorize("Bearer")]
         [HttpPost]
         public async Task<ActionResult<List<Client>>> AddClient(Client _client)
         {
@@ -73,7 +74,7 @@ namespace CustomerService.Controllers
                 return StatusCode((int)HttpStatusCode.InternalServerError, e.Message);
             }
         }
-
+        [Authorize("Bearer")]
         [HttpPut("{id}")]
         public async Task<ActionResult<List<Client>>> UpdateClient(int id, Client request)
         {
@@ -95,7 +96,7 @@ namespace CustomerService.Controllers
                 return StatusCode((int)HttpStatusCode.InternalServerError, e.Message); 
             }
         }
-
+        [Authorize("Bearer")]
         [HttpDelete("{id}")]
         public async Task<ActionResult<List<Client>>> DeleteClient(int id)
         {

@@ -5,7 +5,7 @@
 namespace CustomerService.Migrations
 {
     /// <inheritdoc />
-    public partial class InitialCreation : Migration
+    public partial class DBUpdate : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)

@@ -17,7 +17,7 @@ namespace CustomerService.Services.CardServices
         }
         public async Task<List<Card>> GetAllCards()
         {
-            
+
             return await _dbContext.Cards.ToListAsync();
         }
 
@@ -69,9 +69,29 @@ namespace CustomerService.Services.CardServices
             try
             {
                 var card = await _dbContext.Cards.FindAsync(id);
+                Client client = await RetornaClientConciliado(card.CardNumber);
+
+                if ((!card.IsBlocked) || (!card.IsActive) || (card.CurrentLimit < value) || (!client.IsActive))
+                    return false;
+
                 card.CurrentLimit -= value;
+
                 await _dbContext.SaveChangesAsync();
                 return true;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+        public async Task<Client> RetornaClientConciliado(string cardNumber)
+        {
+            try
+            {
+                Card card = await GetCardIdByCardNumber(cardNumber);
+                Client client = await _dbContext.Clients.Where(client => client.AccountNumber == card.AccountNumber && client.AgencyNumber == card.AgencyNumber)
+                    .FirstOrDefaultAsync();
+                return client;
             }
             catch (Exception ex)
             {
