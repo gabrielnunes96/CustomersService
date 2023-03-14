@@ -19,7 +19,7 @@ namespace CustomerIssuer.Controllers
         public async Task<ActionResult<List<Transaction>>> GetAllTransactions()
         {
             if (!ModelState.IsValid)
-                return BadRequest();
+                return BadRequest(ModelState);
             try
             {
                 return Ok(await _transactionService.GetAllTransactions());
@@ -31,7 +31,7 @@ namespace CustomerIssuer.Controllers
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<Transaction>> GetTransactionById(int id)
+        public async Task<ActionResult<Transaction>> GetTransactionById(Guid id)
         {
             if (!ModelState.IsValid)
                 return BadRequest();
@@ -52,10 +52,13 @@ namespace CustomerIssuer.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<List<Transaction>>> AddTransaction([FromBody] Transaction _transaction)
+        public async Task<ActionResult<List<Transaction>>> AddTransaction(Transaction _transaction)
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
+
+            if (!Transaction.isValidValue(_transaction.TransactionValue)) 
+                return BadRequest("Invalid Value");
 
             if (!Transaction.IsValidCard(_transaction.TransactionCardNumber))
                 return BadRequest("Invalid card number");
@@ -76,10 +79,13 @@ namespace CustomerIssuer.Controllers
         }
 
         [HttpPut("{id}")]
-        public async Task<ActionResult<List<Transaction>>> UpdateTransaction([FromBody] Transaction request, int id)
+        public async Task<ActionResult<List<Transaction>>> UpdateTransaction(Transaction request, Guid id)
         {
             if (!Transaction.IsValidCard(request.TransactionCardNumber))
                 return BadRequest("Invalid card number");
+
+            if (!Transaction.isValidValue(request.TransactionValue))
+                return BadRequest("Invalid Value");
 
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
@@ -101,7 +107,7 @@ namespace CustomerIssuer.Controllers
         }
 
         [HttpDelete("{id}")]
-        public async Task<ActionResult<List<Transaction>>> DeleteTransaction(int id)
+        public async Task<ActionResult<List<Transaction>>> DeleteTransaction(Guid id)
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);

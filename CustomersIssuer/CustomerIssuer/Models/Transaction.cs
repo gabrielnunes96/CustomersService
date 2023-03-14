@@ -9,13 +9,13 @@ namespace CustomerIssuer.Models
         [JsonIgnore]
         public Guid TransactionId { get; set; }
 
+        [JsonIgnore]
+        public Guid TransactionApprovalId { get; set; }
+
         [Required(ErrorMessage = "The card number is required.")]
         [RegularExpression("^\\d+$", ErrorMessage = "Card number must contain only numbers.")]
         [MaxLength(16)]
         public string TransactionCardNumber { get; set; }
-
-        [JsonIgnore]
-        public Guid TransactionApprovalId { get; set; }
 
         public string TransactionDate { get; set; }
 
@@ -50,6 +50,16 @@ namespace CustomerIssuer.Models
 
             // Check if the sum is a multiple of 10
             return sum % 10 == 0;
+        }
+
+        public static bool isValidValue(float value)
+        {
+            bool result = true;
+            if (value < 0)
+                result = false;
+
+            return result ;
+
         }
     }
 }
