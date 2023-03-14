@@ -1,4 +1,5 @@
 ﻿using CustomerIssuer.Data.Context;
+using Newtonsoft.Json;
 using System.Data;
 using System.Net.Http.Headers;
 namespace CustomerIssuer.Services.TransactionServices
@@ -27,11 +28,34 @@ namespace CustomerIssuer.Services.TransactionServices
         {
             HttpClient client = new HttpClient();
             Uri usuarioUri;
-            if (client is null)
-            {
-                client.BaseAddress = new Uri("http://localhost:5254/");
-                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-            }
+
+            client.BaseAddress = new Uri("http://localhost:5254/");
+
+            var cardNumber = _transaction.TransactionCardNumber;
+    
+
+            //get jwt token
+            var getDadosLoginUrl = await client.GetAsync($"http://localhost:5254/api/login/{cardNumber}");
+            getDadosLoginUrl.EnsureSuccessStatusCode();
+
+            var dadosLoginContent = await getDadosLoginUrl.Content.ReadAsStringAsync();
+            var result = JsonConvert.DeserializeObject<dynamic>(dadosLoginContent);
+
+            var agency = result.AgencyNumber;
+            var account = result.AccountNumber;
+
+
+            var loginApiUrl = await client.GetAsync($"http://localhost:5254/api/login/{agency}/{account}");
+            loginApiUrl.EnsureSuccessStatusCode();
+
+            var loginContent = await loginApiUrl.Content.ReadAsStringAsync();
+            var loginResult = JsonConvert.DeserializeObject<dynamic> (loginContent);
+            var token = loginResult.acessToken;
+
+
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+            client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+
 
             _transaction.TransactionDate = DateTime.Now.ToString("dd/MM/yyyy HH:mm:ss");
             if(_transaction.TransactionApprovalId == Guid.Empty)
@@ -42,7 +66,7 @@ namespace CustomerIssuer.Services.TransactionServices
 
             _dbContext.Transactions.Add(_transaction);
 
-            var cardNumber = _transaction.TransactionCardNumber;
+
             var creditCardApiUrl = $"http://localhost:5254/api/{cardNumber}";
             var creditCardResponse = await client.GetAsync(creditCardApiUrl);
             var creditCardContent = await creditCardResponse.Content.ReadAsStringAsync();
@@ -64,11 +88,8 @@ namespace CustomerIssuer.Services.TransactionServices
         {
             HttpClient client = new HttpClient();
             Uri usuarioUri;
-            if (client is null)
-            {
-                client.BaseAddress = new Uri("http://localhost:5254/");
-                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-            }
+            client.BaseAddress = new Uri("http://localhost:5254/");
+            client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
             var transaction = await _dbContext.Transactions.FindAsync(id);
             if (transaction is null) return null;
 
