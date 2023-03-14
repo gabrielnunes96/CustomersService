@@ -14,6 +14,11 @@ namespace CustomerService.Controllers
         {
             _cardService = cardService;
         }
+
+        /// <summary>
+        /// Endpoint para buscar todos os cartões 
+        /// </summary>
+        /// <param name=""></param>
         [Authorize("Bearer")]
         [HttpGet]
         public async Task<ActionResult<List<Client>>> GetAllCards()
@@ -29,6 +34,10 @@ namespace CustomerService.Controllers
                 return StatusCode((int)HttpStatusCode.InternalServerError, e.Message);
             }
         }
+        /// <summary>
+        /// Endpoint para buscar apenas um cartão 
+        /// </summary>
+        /// <param name="id"></param>
         [Authorize("Bearer")]
         [HttpGet("/api/cards/{id}")]
         public async Task<ActionResult<Client>> GetCardById(int id)
@@ -50,6 +59,10 @@ namespace CustomerService.Controllers
                 return StatusCode((int)HttpStatusCode.InternalServerError, e.Message);
             }
         }
+        /// <summary>
+        /// Endpoint para adicionar cartões 
+        /// </summary>
+        /// <param name="_card"></param>
         [Authorize("Bearer")]
         [HttpPost]
         public async Task<ActionResult<List<Card>>> AddCards([FromBody] Card _card)
@@ -77,6 +90,11 @@ namespace CustomerService.Controllers
                 return StatusCode((int)HttpStatusCode.InternalServerError, e.Message);
             }
         }
+        /// <summary>
+        /// Endpoint para atualizar cartões 
+        /// </summary>
+        /// <param name="request"></param>
+        /// <param name="id"></param>
         [Authorize("Bearer")]
         [HttpPut("/api/cards/{id}")]
         public async Task<ActionResult<List<Card>>> UpdateCard([FromBody] Card request, int id)
@@ -105,6 +123,10 @@ namespace CustomerService.Controllers
                 return StatusCode((int)HttpStatusCode.InternalServerError, e.Message);
             }
         }
+        /// <summary>
+        /// Endpoint para deletar um cartão 
+        /// </summary>
+        /// <param name="id"></param>
         [Authorize("Bearer")]
         [HttpDelete("/api/cards/{id}")]
         public async Task<ActionResult<List<Card>>> DeleteCard(int id)
@@ -126,6 +148,10 @@ namespace CustomerService.Controllers
                 return StatusCode((int)HttpStatusCode.InternalServerError, e.Message);
             }
         }
+        /// <summary>
+        /// Endpoint para retornar um id de um cartão através do número do cartão
+        /// </summary>
+        /// <param name="cardNumber"></param>
         [Authorize("Bearer")]
         [HttpGet("/api/{cardNumber}")]
         public async Task<ActionResult<int>> GetCardIdByCardNumber(string cardNumber)
@@ -147,6 +173,11 @@ namespace CustomerService.Controllers
                 return StatusCode((int)HttpStatusCode.InternalServerError, e.Message);
             }
         }
+        /// <summary>
+        /// Endpoint para subtrair um valor do limite de um cartão
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="value"></param>
         [Authorize("Bearer")]
         [HttpGet("/api/card/{id}/subtract/{value}")]
         public async Task<ActionResult<bool>> Subtract(int id, float value)
@@ -158,26 +189,6 @@ namespace CustomerService.Controllers
             try
             {
                 var result = await _cardService.Subtract(id, value);
-                return Ok(result);
-
-            }
-            catch (ArgumentException e)
-            {
-                return StatusCode((int)HttpStatusCode.InternalServerError, e.Message);
-            }
-
-        }
-
-        [Authorize("Bearer")]
-        [HttpGet("/api/card/user/{cardNumber}")]
-        public async Task<ActionResult<bool>> RetornaClientConciliado(string cardNumber)
-        {
-            if (!ModelState.IsValid) return BadRequest(ModelState);
-            if (!Card.IsValidCard(cardNumber)) return BadRequest("Invalid card number");
-
-            try
-            {
-                var result = await _cardService.RetornaClientConciliado(cardNumber);
                 return Ok(result);
 
             }

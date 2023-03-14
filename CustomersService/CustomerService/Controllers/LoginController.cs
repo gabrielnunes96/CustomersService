@@ -5,6 +5,12 @@ using System.Net;
 
 namespace CustomerService.Controllers
 {
+    /// <summary>
+    /// Endpoint para fazer login do usuário
+    /// </summary>
+    /// <param name="agency"></param>
+    /// <param name="account"></param>
+    /// <param name="service"></param>
     [Route("api/[controller]")]
     [ApiController]
     public class LoginController : ControllerBase

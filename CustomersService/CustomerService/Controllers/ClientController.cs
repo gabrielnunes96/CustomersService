@@ -15,6 +15,10 @@ namespace CustomerService.Controllers
         {
             _clientService = clientService;
         }
+        /// <summary>
+        /// Endpoint para buscar todos os clientes
+        /// </summary>
+        /// <param name=""></param>
         [Authorize("Bearer")]
         [HttpGet]
         public async Task<ActionResult<List<Client>>> GetAllClients()
@@ -32,6 +36,10 @@ namespace CustomerService.Controllers
             }
             
         }
+        /// <summary>
+        /// Endpoint para buscar um cliente
+        /// </summary>
+        /// <param name="id"></param>
         [Authorize("Bearer")]
         [HttpGet("{id}")]
         public async Task<ActionResult<Client>> GetClientById(int id)
@@ -53,6 +61,10 @@ namespace CustomerService.Controllers
                 return StatusCode((int)HttpStatusCode.InternalServerError, e.Message);
             }
         }
+        /// <summary>
+        /// Endpoint para adicionar um cliente
+        /// </summary>
+        /// <param name="_client"></param>
         [Authorize("Bearer")]
         [HttpPost]
         public async Task<ActionResult<List<Client>>> AddClient(Client _client)
@@ -74,6 +86,11 @@ namespace CustomerService.Controllers
                 return StatusCode((int)HttpStatusCode.InternalServerError, e.Message);
             }
         }
+        /// <summary>
+        /// Endpoint para atualizar um cliente
+        /// </summary>
+        /// <param name="request"></param>
+        /// <param name="id"></param>
         [Authorize("Bearer")]
         [HttpPut("{id}")]
         public async Task<ActionResult<List<Client>>> UpdateClient(int id, Client request)
@@ -96,6 +113,11 @@ namespace CustomerService.Controllers
                 return StatusCode((int)HttpStatusCode.InternalServerError, e.Message); 
             }
         }
+
+        /// <summary>
+        /// Endpoint para deletar um cliente
+        /// </summary>
+        /// <param name="id"></param>
         [Authorize("Bearer")]
         [HttpDelete("{id}")]
         public async Task<ActionResult<List<Client>>> DeleteClient(int id)
