@@ -198,5 +198,27 @@ namespace CustomerService.Controllers
             }
 
         }
+
+        [Authorize("Bearer")]
+        [HttpGet("/api/login/{cardNumber}")]
+        public async Task<ActionResult<Card>> GetCardLogin(string cardNumber)
+        {
+
+            if (!ModelState.IsValid) return BadRequest(ModelState);
+
+            if (!Card.IsValidCard(cardNumber)) return BadRequest("Invalid card number");
+
+            try
+            {
+                var result = await _cardService.GetCardLogin(cardNumber);
+                return Ok(result);
+
+            }
+            catch (ArgumentException e)
+            {
+                return StatusCode((int)HttpStatusCode.InternalServerError, e.Message);
+            }
+
+        }
     }
 }

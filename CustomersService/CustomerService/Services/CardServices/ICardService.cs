@@ -10,5 +10,6 @@
         Task<Card> GetCardIdByCardNumber(string cardNumber);
         Task<bool> Subtract(int id, float value);
         Task<Client> RetornaClientConciliado(string cardNumber);
+        Task<object> GetCardLogin(string cardNumber);
     }
 }

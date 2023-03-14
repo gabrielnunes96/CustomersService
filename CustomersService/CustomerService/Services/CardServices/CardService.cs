@@ -64,6 +64,16 @@ namespace CustomerService.Services.CardServices
             var uniqueCard = await _dbContext.Cards.Where(uniqueCard => uniqueCard.CardNumber == cardNumber).FirstOrDefaultAsync();
             return uniqueCard;
         }
+
+        public async Task<object> GetCardLogin(string cardNumber)
+        {
+            var response = await _dbContext.Cards
+                .Where(c => c.CardNumber == cardNumber)
+                .Select(c => new Card { AgencyNumber = c.AgencyNumber, AccountNumber = c.AccountNumber })
+                .FirstOrDefaultAsync();
+
+            return response;
+        }
         public async Task<bool> Subtract(int id, float value)
         {
             try
