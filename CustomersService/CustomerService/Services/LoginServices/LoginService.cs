@@ -84,7 +84,7 @@ namespace CustomerService.Services.LoginServices
                 authenticated = true,
                 created = createDate.ToString("yyyy-MM-dd HH:mm:ss"),
                 expiration = expirationDate.ToString("yyyy-MM-dd HH:mm:ss"),
-                acessToken = token,
+                acessToken = "Bearer " + token,
                 userAgency = agency,
                 userAccount = account,
                 message = "Usuário logado com sucesso"

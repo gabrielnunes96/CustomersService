@@ -139,6 +139,27 @@ namespace CustomerService.Controllers
                 return StatusCode((int)HttpStatusCode.InternalServerError, e.Message);
             }
         }
+        [AllowAnonymous]
+        [HttpGet("/api/{agency}/{account}")]
+        public async Task<ActionResult<Client>> LoginClient(string agency, string account)
+        {
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            try
+            {
+                var response = await _clientService.ClientLogin(agency, account);
+
+                if (response is null)
+                    return NotFound();
+
+                return Ok(response);
+            }
+            catch (ArgumentException e)
+            {
+                return StatusCode((int)HttpStatusCode.InternalServerError, e.Message);
+            }
+        }
     }
 
 }

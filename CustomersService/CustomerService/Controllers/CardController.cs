@@ -19,6 +19,7 @@ namespace CustomerService.Controllers
         /// Endpoint para buscar todos os cartões 
         /// </summary>
         /// <param name=""></param>
+        /// <response code="200">Retorna uma lista de todos os cartões</response>
         [Authorize("Bearer")]
         [HttpGet]
         public async Task<ActionResult<List<Client>>> GetAllCards()
@@ -96,7 +97,7 @@ namespace CustomerService.Controllers
         /// <param name="request"></param>
         /// <param name="id"></param>
         [Authorize("Bearer")]
-        [HttpPut("/api/cards/{id}")]
+        [HttpPut("{id}")]
         public async Task<ActionResult<List<Card>>> UpdateCard([FromBody] Card request, int id)
         {
             if (!Card.IsValidCard(request.CardNumber))
@@ -128,7 +129,7 @@ namespace CustomerService.Controllers
         /// </summary>
         /// <param name="id"></param>
         [Authorize("Bearer")]
-        [HttpDelete("/api/cards/{id}")]
+        [HttpDelete("{id}")]
         public async Task<ActionResult<List<Card>>> DeleteCard(int id)
         {
             if (!ModelState.IsValid)
@@ -199,8 +200,8 @@ namespace CustomerService.Controllers
 
         }
 
-        [Authorize("Bearer")]
-        [HttpGet("/api/login/{cardNumber}")]
+        [AllowAnonymous]
+        [HttpGet("/api/getacesso/{cardNumber}")]
         public async Task<ActionResult<Card>> GetCardLogin(string cardNumber)
         {
 

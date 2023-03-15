@@ -69,7 +69,7 @@ namespace CustomerService.Services.CardServices
         {
             var response = await _dbContext.Cards
                 .Where(c => c.CardNumber == cardNumber)
-                .Select(c => new Card { AgencyNumber = c.AgencyNumber, AccountNumber = c.AccountNumber })
+                .Select(c => new { c.AgencyNumber, c.AccountNumber  })
                 .FirstOrDefaultAsync();
 
             return response;

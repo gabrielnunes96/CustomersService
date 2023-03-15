@@ -16,7 +16,7 @@ namespace CustomerService.Controllers
     public class LoginController : ControllerBase
     {
         [AllowAnonymous]
-        [HttpPost("/api/login/{agency}/{account}")]
+        [HttpGet("/api/login/{agency}/{account}")]
         public async Task<object> Login(string agency, string account, [FromServices] ILoginService service)
         {
             if (!ModelState.IsValid)

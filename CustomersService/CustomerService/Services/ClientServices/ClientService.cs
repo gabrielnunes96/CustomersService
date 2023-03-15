@@ -1,4 +1,5 @@
 ﻿using CustomerService.Data.Context;
+using Microsoft.EntityFrameworkCore;
 
 namespace CustomerService.Services.ClientServices
 {
@@ -52,7 +53,8 @@ namespace CustomerService.Services.ClientServices
         }
         public async Task<Client> ClientLogin(string agency, string account)
         {
-            return await _dbContext.Clients.FirstOrDefaultAsync(x => x.AgencyNumber.Equals(agency) && x.AccountNumber.Equals(account));
+            var response = await _dbContext.Clients.Where(response => (response.AgencyNumber == agency) && (response.AccountNumber == account)).FirstOrDefaultAsync();
+            return response;
         }
     }
 }

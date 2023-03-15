@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.Options;
 using Microsoft.OpenApi.Models;
+using System.Reflection;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -81,6 +82,9 @@ builder.Services.AddSwaggerGen(c =>
             new List<string>()
         }
     });
+
+    c.SwaggerDoc("v1", new OpenApiInfo { Title = "CustomerServiceAPI", Version = "v1" });
+
 });
 
 
@@ -90,7 +94,10 @@ var app = builder.Build();
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
-    app.UseSwaggerUI();
+    app.UseSwaggerUI(options =>
+    {
+        options.SwaggerEndpoint("/swagger/v1/swagger.json", "CustomerServiceAPI v1");
+    });
 }
 
 app.UseHttpsRedirection();

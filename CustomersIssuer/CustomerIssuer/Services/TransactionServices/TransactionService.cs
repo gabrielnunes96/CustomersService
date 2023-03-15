@@ -26,36 +26,30 @@ namespace CustomerIssuer.Services.TransactionServices
 
         public async Task<Transaction> AddTransaction(Transaction _transaction)
         {
-            HttpClient client = new HttpClient();
-            Uri usuarioUri;
-
-            client.BaseAddress = new Uri("http://localhost:5254/");
+            HttpClient client = new();
 
             var cardNumber = _transaction.TransactionCardNumber;
     
-
             //get jwt token
-            var getDadosLoginUrl = await client.GetAsync($"http://localhost:5254/api/login/{cardNumber}");
+            var getDadosLoginUrl = await client.GetAsync($"http://localhost:5254/api/getacesso/{cardNumber}");
             getDadosLoginUrl.EnsureSuccessStatusCode();
 
             var dadosLoginContent = await getDadosLoginUrl.Content.ReadAsStringAsync();
             var result = JsonConvert.DeserializeObject<dynamic>(dadosLoginContent);
 
-            var agency = result.AgencyNumber;
-            var account = result.AccountNumber;
-
+            string agency = result.agencyNumber;
+            string account = result.accountNumber;
 
             var loginApiUrl = await client.GetAsync($"http://localhost:5254/api/login/{agency}/{account}");
             loginApiUrl.EnsureSuccessStatusCode();
 
             var loginContent = await loginApiUrl.Content.ReadAsStringAsync();
             var loginResult = JsonConvert.DeserializeObject<dynamic> (loginContent);
-            var token = loginResult.acessToken;
+            string token = loginResult.acessToken;
 
 
-            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token.Substring("Bearer ".Length));
             client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-
 
             _transaction.TransactionDate = DateTime.Now.ToString("dd/MM/yyyy HH:mm:ss");
             if(_transaction.TransactionApprovalId == Guid.Empty)
@@ -63,9 +57,6 @@ namespace CustomerIssuer.Services.TransactionServices
                 _transaction.TransactionId = Guid.NewGuid();
                 _transaction.TransactionApprovalId = Guid.NewGuid();
             }
-
-            _dbContext.Transactions.Add(_transaction);
-
 
             var creditCardApiUrl = $"http://localhost:5254/api/{cardNumber}";
             var creditCardResponse = await client.GetAsync(creditCardApiUrl);
@@ -79,6 +70,8 @@ namespace CustomerIssuer.Services.TransactionServices
 
             await creditCardSubtractResponse.Content.ReadAsStringAsync();
 
+            _dbContext.Transactions.Add(_transaction);
+
             await _dbContext.SaveChangesAsync();
 
             return await _dbContext.Transactions.FindAsync(_transaction.TransactionId);
@@ -87,11 +80,34 @@ namespace CustomerIssuer.Services.TransactionServices
         public async Task<Transaction> UpdateTransaction(Transaction request, Guid id)
         {
             HttpClient client = new HttpClient();
-            Uri usuarioUri;
-            client.BaseAddress = new Uri("http://localhost:5254/");
             client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
             var transaction = await _dbContext.Transactions.FindAsync(id);
-            if (transaction is null) return null;
+
+            var cardNumber = request.TransactionCardNumber;
+            if (request.TransactionCardNumber == null)
+                cardNumber = transaction.TransactionCardNumber;
+
+            //get jwt token
+            var getDadosLoginUrl = await client.GetAsync($"http://localhost:5254/api/getacesso/{cardNumber}");
+            getDadosLoginUrl.EnsureSuccessStatusCode();
+
+            var dadosLoginContent = await getDadosLoginUrl.Content.ReadAsStringAsync();
+            var result = JsonConvert.DeserializeObject<dynamic>(dadosLoginContent);
+
+            string agency = result.agencyNumber;
+            string account = result.accountNumber;
+
+            var loginApiUrl = await client.GetAsync($"http://localhost:5254/api/login/{agency}/{account}");
+            loginApiUrl.EnsureSuccessStatusCode();
+
+            var loginContent = await loginApiUrl.Content.ReadAsStringAsync();
+            var loginResult = JsonConvert.DeserializeObject<dynamic>(loginContent);
+            string token = loginResult.acessToken;
+
+
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token.Substring("Bearer ".Length));
+            client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+
 
 
             transaction.TransactionValue = request.TransactionValue;
@@ -99,7 +115,6 @@ namespace CustomerIssuer.Services.TransactionServices
             transaction.TransactionDate = DateTime.Now.ToString("dd/MM/yyyy HH:mm:ss");
             transaction.TransactionApprovalId = Guid.NewGuid();
 
-            var cardNumber = request.TransactionCardNumber;
             var creditCardApiUrl = $"http://localhost:5254/api/{cardNumber}";
             var creditCardResponse = await client.GetAsync(creditCardApiUrl);
             var creditCardContent = await creditCardResponse.Content.ReadAsStringAsync();
