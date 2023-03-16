@@ -18,7 +18,7 @@ namespace CustomerService.Controllers
         /// <summary>
         /// Endpoint para buscar todos os clientes
         /// </summary>
-        /// <param name=""></param>
+        /// <returns> Retorna mensagem com todos os clientes </returns>
         [Authorize("Bearer")]
         [HttpGet]
         public async Task<ActionResult<List<Client>>> GetAllClients()
@@ -40,6 +40,7 @@ namespace CustomerService.Controllers
         /// Endpoint para buscar um cliente
         /// </summary>
         /// <param name="id"></param>
+        /// <returns> Retorna mensagem contendo o cliente específicado pelo ID </returns>
         [Authorize("Bearer")]
         [HttpGet("{id}")]
         public async Task<ActionResult<Client>> GetClientById(int id)
@@ -65,6 +66,7 @@ namespace CustomerService.Controllers
         /// Endpoint para adicionar um cliente
         /// </summary>
         /// <param name="_client"></param>
+        /// <returns> Retorna mensagem com o Cliente Adicionado ao BD </returns>
         [Authorize("Bearer")]
         [HttpPost]
         public async Task<ActionResult<List<Client>>> AddClient(Client _client)
@@ -91,6 +93,7 @@ namespace CustomerService.Controllers
         /// </summary>
         /// <param name="request"></param>
         /// <param name="id"></param>
+        /// <returns> Retorna mensagem com o cliente atualizado </returns>
         [Authorize("Bearer")]
         [HttpPut("{id}")]
         public async Task<ActionResult<List<Client>>> UpdateClient(int id, Client request)
@@ -118,6 +121,7 @@ namespace CustomerService.Controllers
         /// Endpoint para deletar um cliente
         /// </summary>
         /// <param name="id"></param>
+        /// <returns> Retorna mensagem com o cliente deletado </returns>
         [Authorize("Bearer")]
         [HttpDelete("{id}")]
         public async Task<ActionResult<List<Client>>> DeleteClient(int id)
@@ -139,6 +143,12 @@ namespace CustomerService.Controllers
                 return StatusCode((int)HttpStatusCode.InternalServerError, e.Message);
             }
         }
+        /// <summary>
+        /// Endpoint retorna se o cliente informado existe no BD 
+        /// </summary>
+        /// <param name="agency"></param>
+        /// <param name="account"></param>
+        /// <returns> Retorna mensagem contendo cliente encontrado</returns>
         [AllowAnonymous]
         [HttpGet("/api/{agency}/{account}")]
         public async Task<ActionResult<Client>> LoginClient(string agency, string account)

@@ -5,16 +5,18 @@ using System.Net;
 
 namespace CustomerService.Controllers
 {
-    /// <summary>
-    /// Endpoint para fazer login do usuário
-    /// </summary>
-    /// <param name="agency"></param>
-    /// <param name="account"></param>
-    /// <param name="service"></param>
+
     [Route("api/[controller]")]
     [ApiController]
     public class LoginController : ControllerBase
     {
+        /// <summary>
+        /// Endpoint para fazer login do usuário
+        /// </summary>
+        /// <param name="agency"></param>
+        /// <param name="account"></param>
+        /// <param name="service"></param>
+        /// <returns> Retorna mensagem autênticado cliente</returns>
         [AllowAnonymous]
         [HttpGet("/api/login/{agency}/{account}")]
         public async Task<object> Login(string agency, string account, [FromServices] ILoginService service)

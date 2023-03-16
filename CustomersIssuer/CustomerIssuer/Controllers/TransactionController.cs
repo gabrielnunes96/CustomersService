@@ -14,7 +14,10 @@ namespace CustomerIssuer.Controllers
         {
             _transactionService = transactionService;
         }
-
+        /// <summary>
+        /// Retorna todas as transações no BD
+        /// </summary>
+        /// <returns>Mensagem confirmando todas as transações</returns>
         [HttpGet]
         public async Task<ActionResult<List<Transaction>>> GetAllTransactions()
         {
@@ -29,7 +32,11 @@ namespace CustomerIssuer.Controllers
                 return StatusCode((int)HttpStatusCode.InternalServerError, e.Message);
             }
         }
-
+        /// <summary>
+        /// Retorna uma transação específica no banco de dados
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns>Mensagem com a transação específicada através do ID</returns>
         [HttpGet("{id}")]
         public async Task<ActionResult<Transaction>> GetTransactionById(Guid id)
         {
@@ -50,7 +57,11 @@ namespace CustomerIssuer.Controllers
                 return StatusCode((int)HttpStatusCode.InternalServerError, e.Message);
             }
         }
-
+        /// <summary>
+        /// Adicionar uma transação ao Banco de Dados
+        /// </summary>
+        /// <param name="_transaction"></param>
+        /// <returns>Retorna mensagem contendo a transação no BD</returns>
         [HttpPost]
         public async Task<ActionResult<List<Transaction>>> AddTransaction(Transaction _transaction)
         {
@@ -77,7 +88,12 @@ namespace CustomerIssuer.Controllers
                 return StatusCode((int)HttpStatusCode.InternalServerError, e.Message);
             }
         }
-
+        /// <summary>
+        /// Atualiza determinada transação
+        /// </summary>
+        /// <param name="request"></param>
+        /// <param name="id"></param>
+        /// <returns>Retorna mensagem contendo a transação atualizada através dos parâmetros "request" e "id"</returns>
         [HttpPut("{id}")]
         public async Task<ActionResult<List<Transaction>>> UpdateTransaction(Transaction request, Guid id)
         {
@@ -105,7 +121,11 @@ namespace CustomerIssuer.Controllers
                 return StatusCode((int)HttpStatusCode.InternalServerError, e.Message);
             }
         }
-
+        /// <summary>
+        /// Deleta determinada transação do BD
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns>Retorna mensagem contendo transação deletada</returns>
         [HttpDelete("{id}")]
         public async Task<ActionResult<List<Transaction>>> DeleteTransaction(Guid id)
         {

@@ -82,8 +82,29 @@ builder.Services.AddSwaggerGen(c =>
             new List<string>()
         }
     });
+    c.SwaggerDoc("v1", new OpenApiInfo
+    {
+        Version = "v1",
+        Title = "CustomerServiceAPI",
+        Description = "API para manipular Cartões de Crédito e seus respectivos usuários",
+        TermsOfService = new Uri("https://abcdxzy.com"),
+        Contact = new OpenApiContact
+        {
+            Name = "Gabriel Nunes Campos",
+            Email = "gabriel.nunes@b2card.com.br",
+            Url = new Uri("https://gabrielcampos.com")
+        },
+        License = new OpenApiLicense()
+        {
+            Name = "Open Source",
+            Url = new Uri("https://opensource.com")
+        }
+    });
 
-    c.SwaggerDoc("v1", new OpenApiInfo { Title = "CustomerServiceAPI", Version = "v1" });
+    var arquivoSwaggerXML = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+    var diretorioArquivoXML = Path.Combine(AppContext.BaseDirectory, arquivoSwaggerXML);
+    c.IncludeXmlComments(diretorioArquivoXML);
+
 
 });
 

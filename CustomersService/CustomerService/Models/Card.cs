@@ -4,43 +4,83 @@ namespace CustomerService.Models
 {
     public class Card
     {
+        /// <summary>
+        /// Id do cartão
+        /// </summary>
+        /// <example> 1 </example>
         [Key]
         public int Id { get; set; }
 
+        /// <summary>
+        /// Número do cartão
+        /// </summary>
+        /// <example> 5322574141570170 </example>
         [Required(ErrorMessage = "The card number is required.")]
         [RegularExpression("^\\d+$", ErrorMessage = "Card number must contain only numbers.")]
         [MaxLength(16)]
         public string CardNumber { get; set; }
 
+        /// <summary>
+        /// Data de expiração do cartão
+        /// </summary>
+        /// <example> 08/23 </example>
         [Required(ErrorMessage = "Card expiration date is required.")]
         [MaxLength(5)]
         [RegularExpression("^(0[1-9]|1[0-2])/?([0-9]{2})$", ErrorMessage = "Invalid expiration date")]
         public string CardExpirationDate { get; set; }
 
+        /// <summary>
+        /// Código CVC do Cartão
+        /// </summary>
+        /// <example> 427 </example>
         [Required(ErrorMessage = "CVC is required.")]
         [RegularExpression("^\\d+$", ErrorMessage = "CVC must contain only numbers")]
         [MaxLength(3)]
         [MinLength(3)]
         public string CVC { get; set; }
 
+        /// <summary>
+        /// Número da Conta do Cartão
+        /// </summary>
+        /// <example> 6640 </example>
         [Required(ErrorMessage = "The account number is required.")]
         [RegularExpression("^\\d+$", ErrorMessage = "Account number must contain only numbers")]
         [MaxLength(10)]
         public string AccountNumber { get; set; }
 
+        /// <summary>
+        /// Número da Agência do cartão
+        /// </summary>
+        /// <example> 2310 </example>
         [Required(ErrorMessage = "The agency number is required.")]
         [RegularExpression("^\\d+$", ErrorMessage = "Agency number must contain only numbers")]
         [MaxLength(10)]
         public string AgencyNumber { get; set; }
 
+        /// <summary>
+        /// Limite TOTAL do cartão
+        /// </summary>
+        /// <example> 6000 </example>
         [Required(ErrorMessage = "The total limit is required.")]
         public float TotalLimit { get; set; }
 
+        /// <summary>
+        /// Limite ATUAL do cartão
+        /// </summary>
+        /// <example> 3000 </example>
         public float CurrentLimit { get; set; }
 
+        /// <summary>
+        /// Status de ativo ou inativo do cartão
+        /// </summary>
+        /// <example> 'true' or 'false' </example>
         [Required(ErrorMessage = "It is necessary to inform if the card is active. 'true' for yes and 'false' for no.")]
         public bool IsActive { get; set; }
 
+        /// <summary>
+        /// Status que indica se o cartão está bloqueado ou não
+        /// </summary>
+        /// <example> 'true' or 'false' </example>
         public bool IsBlocked { get; set; }
 
         public static bool IsValidCard(string card)

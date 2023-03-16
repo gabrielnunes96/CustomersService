@@ -5,20 +5,40 @@ namespace CustomerIssuer.Models
 {
     public class Transaction
     {
+        /// <summary>
+        /// Id da transação
+        /// </summary>
+        /// <example> 3D17C904-2F6D-483D-A464-0F048EE6EE99 </example>
         [Key]
         [JsonIgnore]
         public Guid TransactionId { get; set; }
 
+        /// <summary>
+        /// Id de aprovação da transação
+        /// </summary>
+        /// <example> F340A703-F6BE-4ED3-A4D7-35516DCEF1CD </example>
         [JsonIgnore]
         public Guid TransactionApprovalId { get; set; }
 
+        /// <summary>
+        /// Número do cartão de crédito da transação
+        /// </summary>
+        /// <example> 5320123433402171 </example>
         [Required(ErrorMessage = "The card number is required.")]
         [RegularExpression("^\\d+$", ErrorMessage = "Card number must contain only numbers.")]
         [MaxLength(16)]
         public string TransactionCardNumber { get; set; }
 
+        /// <summary>
+        /// Data da transação
+        /// </summary>
+        /// <example> 15/03/2023 01:37:42 </example>
         public string TransactionDate { get; set; }
 
+        /// <summary>
+        /// Valor da transação
+        /// </summary>
+        /// <example> 500 </example>
         [Required(ErrorMessage = "The transaction value is required.")]
         public float TransactionValue { get; set; }
 

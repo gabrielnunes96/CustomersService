@@ -18,8 +18,7 @@ namespace CustomerService.Controllers
         /// <summary>
         /// Endpoint para buscar todos os cartões 
         /// </summary>
-        /// <param name=""></param>
-        /// <response code="200">Retorna uma lista de todos os cartões</response>
+        /// <returns>Retorna mensagem com todos os cartões</returns>
         [Authorize("Bearer")]
         [HttpGet]
         public async Task<ActionResult<List<Client>>> GetAllCards()
@@ -39,6 +38,7 @@ namespace CustomerService.Controllers
         /// Endpoint para buscar apenas um cartão 
         /// </summary>
         /// <param name="id"></param>
+        /// <returns> Retorna mensagem contendo cartão específicado pelo ID</returns>
         [Authorize("Bearer")]
         [HttpGet("/api/cards/{id}")]
         public async Task<ActionResult<Client>> GetCardById(int id)
@@ -64,6 +64,7 @@ namespace CustomerService.Controllers
         /// Endpoint para adicionar cartões 
         /// </summary>
         /// <param name="_card"></param>
+        /// <returns> Retorna mensagem com o cartão adicionado </returns>
         [Authorize("Bearer")]
         [HttpPost]
         public async Task<ActionResult<List<Card>>> AddCards([FromBody] Card _card)
@@ -96,6 +97,7 @@ namespace CustomerService.Controllers
         /// </summary>
         /// <param name="request"></param>
         /// <param name="id"></param>
+        /// <returns> Retorna mensagem com o cartão atualizado </returns>
         [Authorize("Bearer")]
         [HttpPut("{id}")]
         public async Task<ActionResult<List<Card>>> UpdateCard([FromBody] Card request, int id)
@@ -128,6 +130,7 @@ namespace CustomerService.Controllers
         /// Endpoint para deletar um cartão 
         /// </summary>
         /// <param name="id"></param>
+        /// <returns> retorna mensagem com o cartão Deletado </returns>
         [Authorize("Bearer")]
         [HttpDelete("{id}")]
         public async Task<ActionResult<List<Card>>> DeleteCard(int id)
@@ -153,6 +156,7 @@ namespace CustomerService.Controllers
         /// Endpoint para retornar um id de um cartão através do número do cartão
         /// </summary>
         /// <param name="cardNumber"></param>
+        /// <returns> Retorna mensagem com o id do cartão através do número do cartão informado </returns>
         [Authorize("Bearer")]
         [HttpGet("/api/{cardNumber}")]
         public async Task<ActionResult<int>> GetCardIdByCardNumber(string cardNumber)
@@ -179,6 +183,7 @@ namespace CustomerService.Controllers
         /// </summary>
         /// <param name="id"></param>
         /// <param name="value"></param>
+        /// <returns> Retorna mensagem dizendo true or false afirmando se o valor foi descontado ou não do limite do cartão </returns>
         [Authorize("Bearer")]
         [HttpGet("/api/card/{id}/subtract/{value}")]
         public async Task<ActionResult<bool>> Subtract(int id, float value)
@@ -199,7 +204,11 @@ namespace CustomerService.Controllers
             }
 
         }
-
+        /// <summary>
+        /// Endopoint que retorna Acesso do Cliente através do número do cartão
+        /// </summary>
+        /// <param name="cardNumber"></param>
+        /// <returns> Retorna mensagem contendo objeto de acesso do usuário </returns>
         [AllowAnonymous]
         [HttpGet("/api/getacesso/{cardNumber}")]
         public async Task<ActionResult<Card>> GetCardLogin(string cardNumber)
