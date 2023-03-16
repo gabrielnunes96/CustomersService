@@ -1,11 +1,15 @@
-﻿global using Microsoft.EntityFrameworkCore;
-namespace CustomerService.Data.Context
+global using Microsoft.EntityFrameworkCore;
+using CustomerIssuer.Models;
+
+namespace CustomerIssuer.Data.Context
 {
     public class DataContext : DbContext
     {
-        public DbSet<Client>? Clients { get; set; }
-        public DbSet<Card>? Cards { get; set; }
+        public DataContext()
+        {
+        }
 
+        public DbSet<Transaction>? Transactions { get; set; }
 
         public DataContext(DbContextOptions<DataContext> options) : base(options) { }
 
@@ -15,7 +19,7 @@ namespace CustomerService.Data.Context
                 .SetBasePath(AppDomain.CurrentDomain.BaseDirectory)
                 .AddJsonFile("appsettings.json")
                 .Build();
-            optionsBuilder.UseSqlServer(configuration.GetConnectionString("CustomerService"));
+            optionsBuilder.UseSqlServer(configuration.GetConnectionString("CustomerIssuer"));
         }
     }
 }

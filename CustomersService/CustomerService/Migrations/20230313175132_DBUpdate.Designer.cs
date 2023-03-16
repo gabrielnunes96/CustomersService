@@ -11,8 +11,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace CustomerService.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20230130162318_FirstMigrationDocker")]
-    partial class FirstMigrationDocker
+    [Migration("20230313175132_DBUpdate")]
+    partial class DBUpdate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -32,40 +32,42 @@ namespace CustomerService.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<string>("accountNumber")
+                    b.Property<string>("AccountNumber")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(10)
+                        .HasColumnType("nvarchar(10)");
 
-                    b.Property<string>("agencyNumber")
+                    b.Property<string>("AgencyNumber")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(10)
+                        .HasColumnType("nvarchar(10)");
 
-                    b.Property<string>("cardCVC")
+                    b.Property<string>("CVC")
                         .IsRequired()
                         .HasMaxLength(3)
                         .HasColumnType("nvarchar(3)");
 
-                    b.Property<string>("cardDueDate")
+                    b.Property<string>("CardExpirationDate")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(5)
+                        .HasColumnType("nvarchar(5)");
 
-                    b.Property<string>("cardNumber")
+                    b.Property<string>("CardNumber")
                         .IsRequired()
                         .HasMaxLength(16)
                         .HasColumnType("nvarchar(16)");
 
-                    b.Property<string>("currentLimit")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<float>("CurrentLimit")
+                        .HasColumnType("real");
 
-                    b.Property<bool>("isActive")
+                    b.Property<bool>("IsActive")
                         .HasColumnType("bit");
 
-                    b.Property<bool>("isBlocked")
+                    b.Property<bool>("IsBlocked")
                         .HasColumnType("bit");
 
-                    b.Property<string>("totalLimit")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<float>("TotalLimit")
+                        .HasColumnType("real");
 
                     b.HasKey("Id");
 
@@ -80,28 +82,28 @@ namespace CustomerService.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<string>("accountNumber")
+                    b.Property<string>("AccountNumber")
                         .IsRequired()
                         .HasMaxLength(10)
                         .HasColumnType("nvarchar(10)");
 
-                    b.Property<string>("accountType")
+                    b.Property<string>("AccountType")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("agencyNumber")
+                    b.Property<string>("AgencyNumber")
                         .IsRequired()
                         .HasMaxLength(10)
                         .HasColumnType("nvarchar(10)");
 
-                    b.Property<string>("idNumber")
+                    b.Property<string>("IdNumber")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<bool>("isActive")
+                    b.Property<bool>("IsActive")
                         .HasColumnType("bit");
 
-                    b.Property<string>("userName")
+                    b.Property<string>("UserName")
                         .IsRequired()
                         .HasMaxLength(30)
                         .HasColumnType("nvarchar(30)");
