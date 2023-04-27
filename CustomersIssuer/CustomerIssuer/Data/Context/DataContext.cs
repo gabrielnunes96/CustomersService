@@ -19,7 +19,7 @@ namespace CustomerIssuer.Data.Context
                 .SetBasePath(AppDomain.CurrentDomain.BaseDirectory)
                 .AddJsonFile("appsettings.json")
                 .Build();
-            optionsBuilder.UseSqlServer(configuration.GetConnectionString("CustomerIssuer"));
+            optionsBuilder.UseSqlServer(configuration.GetConnectionString("Docker"));
         }
     }
 }

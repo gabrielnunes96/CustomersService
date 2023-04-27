@@ -15,7 +15,7 @@ namespace CustomerService.Data.Context
                 .SetBasePath(AppDomain.CurrentDomain.BaseDirectory)
                 .AddJsonFile("appsettings.json")
                 .Build();
-            optionsBuilder.UseSqlServer(configuration.GetConnectionString("CustomerService"));
+            optionsBuilder.UseSqlServer(configuration.GetConnectionString("Docker"));
         }
     }
 }
